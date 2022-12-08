@@ -62,18 +62,23 @@ tar xz --strip-components=1 -C $LOGSTASH_DIR --wildcards -f $CACHE_DIR/$LOGSTASH
 echo "build dir:"
 ls ${BUILD_DIR}
 
-if [ -f "$ENV_DIR/LOGSTASH_PATH" ]; then
-  LOGSTASH_PATH=$(cat $ENV_DIR/LOGSTASH_PATH)
+
+if [ -f "$ENV_DIR/LOGSTASH_CONFIG_PATH" ]; then
+  LOGSTASH_CONFIG_PATH=$(cat $ENV_DIR/LOGSTASH_CONFIG_PATH)
 else
-  LOGSTASH_PATH="logstash/logstash.yml"
+  LOGSTASH_CONFIG_PATH="logstash"
 fi
 
-if [ -f "${BUILD_DIR}/${LOGSTASH_PATH}" ]; then
-    echo "Found logstash.yml file. Applying it."
-    cp ${BUILD_DIR}/${LOGSTASH_PATH} ${LOGSTASH_DIR}/config/logstash.yml
+LOGSTASH_CONFIG_FULL_PATH="${BUILD_DIR}/${LOGSTASH_CONFIG_PATH}"
+
+if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
+    echo "Found logstash configuration directory. Location: ${LOGSTASH_CONFIG_FULL_PATH}"
+    cp ${LOGSTASH_CONFIG_FULL_PATH}/logstash.yml ${LOGSTASH_DIR}/config/logstash.yml
+    cp -r ${LOGSTASH_CONFIG_FULL_PATH}/pipeline ${LOGSTASH_DIR}/pipeline
 else
-    echo "No logstash.yml found, using defaults."
+    echo "No logstash configuration found, using defaults."
 fi
+
 
 echo "Exporting PATH" | indent
 echo 'export PATH="$PATH:'${LOGSTASH_DIR##*/}'/bin"' > $INIT_SCRIPT
