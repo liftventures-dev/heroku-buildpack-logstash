@@ -64,5 +64,18 @@ fi
 
 $extract $CACHE_DIR/$LOGSTASH_PACKAGE
 
+if [ -f "$ENV_DIR/LOGSTASH_PATH" ]; then
+  LOGSTASH_PATH=$(cat $ENV_DIR/LOGSTASH_PATH)
+else
+  LOGSTASH_PATH="logstash/logstash.yml"
+fi
+
+if [ -f "${BUILD_DIR}/${LOGSTASH_PATH}" ]; then
+    echo "Found logstash.yml file. Applying it."
+    cp ${BUILD_DIR}/${LOGSTASH_PATH} ${LOGSTASH_DIR}/config/logstash.yml
+else
+    echo "No logstash.yml found, using defaults."
+fi
+
 echo "Exporting PATH" | indent
 echo 'export PATH="$PATH:'${LOGSTASH_DIR##*/}'/bin"' > $INIT_SCRIPT
