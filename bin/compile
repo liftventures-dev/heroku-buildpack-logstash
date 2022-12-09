@@ -10,6 +10,9 @@ ENV_DIR=$3
 
 INIT_SCRIPT="$BUILD_DIR/.profile.d/logstash.sh"
 
+echo "==== Starting Logstash Buildpack ===="
+echo "$ENV_DIR"
+
 if [ -f "$ENV_DIR/DOWNLOAD_URL" ]; then
   DOWNLOAD_URL=$(cat $ENV_DIR/DOWNLOAD_URL)
 else
@@ -72,7 +75,7 @@ fi
 LOGSTASH_CONFIG_FULL_PATH="${BUILD_DIR}/${LOGSTASH_CONFIG_PATH}"
 
 if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
-    echo "Found logstash configuration directory. Location: ${LOGSTASH_CONFIG_FULL_PATH}"
+    echo "Found Logstash configuration directory. Location: ${LOGSTASH_CONFIG_FULL_PATH}"
 
     echo "Applying logstash.yml"
     cp ${LOGSTASH_CONFIG_FULL_PATH}/logstash.yml ${LOGSTASH_DIR}/config/logstash.yml
@@ -82,7 +85,7 @@ if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
 
     ls ${LOGSTASH_DIR}/pipeline
 else
-    echo "No logstash configuration found, using defaults."
+    echo "No Logstash configuration found, using defaults."
 fi
 
 
