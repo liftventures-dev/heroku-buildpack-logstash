@@ -99,3 +99,5 @@ do
   ENV_VAR_VALUE=$(cat $ENV_FILE)
   echo 'export '${ENV_VAR_NAME}'="'${ENV_VAR_VALUE}'"' >> $INIT_SCRIPT
 done
+
+echo $(cat $INIT_SCRIPT)
