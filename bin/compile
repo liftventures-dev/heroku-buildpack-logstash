@@ -11,7 +11,6 @@ ENV_DIR=$3
 INIT_SCRIPT="$BUILD_DIR/.profile.d/logstash.sh"
 
 echo "==== Starting Logstash Buildpack ===="
-echo "$ENV_DIR"
 
 if [ -f "$ENV_DIR/DOWNLOAD_URL" ]; then
   DOWNLOAD_URL=$(cat $ENV_DIR/DOWNLOAD_URL)
@@ -94,8 +93,9 @@ echo 'export PATH="$PATH:'${LOGSTASH_DIR##*/}'/bin"' > $INIT_SCRIPT
 
 echo "Exporting Heroku env vars" | indent
 FILES="$ENV_DIR/*"
-for ENV_VAR_NAME in $FILES
+for ENV_FILE in $FILES
 do
-  ENV_VAR_VALUE=$(cat $ENV_DIR/$ENV_VAR_NAME)
+  ENV_VAR_NAME=${ENV_FILE##*/}
+  ENV_VAR_VALUE=$(cat $ENV_FILE)
   echo 'export '${ENV_VAR_NAME}'="'${ENV_VAR_VALUE}'"' >> $INIT_SCRIPT
 done
