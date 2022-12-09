@@ -91,3 +91,11 @@ fi
 
 echo "Exporting PATH" | indent
 echo 'export PATH="$PATH:'${LOGSTASH_DIR##*/}'/bin"' > $INIT_SCRIPT
+
+echo "Exporting Heroku env vars" | indent
+FILES="$ENV_DIR/*"
+for ENV_VAR_NAME in $FILES
+do
+  ENV_VAR_VALUE=$(cat $ENV_DIR/$ENV_VAR_NAME)
+  echo 'export '${ENV_VAR_NAME}'="'${ENV_VAR_VALUE}'"' >> $INIT_SCRIPT
+done
