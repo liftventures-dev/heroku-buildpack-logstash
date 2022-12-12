@@ -72,10 +72,10 @@ LOGSTASH_CONFIG_FULL_PATH="${BUILD_DIR}/${LOGSTASH_CONFIG_PATH}"
 
 if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
     echo "Found Logstash configuration directory. Location: ${LOGSTASH_CONFIG_FULL_PATH}" | indent
-    echo $LOGSTASH_CONFIG_FILES | indent
+    echo $LOGSTASH_CONFIG_FILES
 
     echo "-----> Applyinh JARs"
-    cp -r ${LOGSTASH_CONFIG_FILES}/jars ${LOGSTASH_DIR}/logstash-core/lib/jars
+    cp -r ${LOGSTASH_CONFIG_FULL_PATH}/jars ${LOGSTASH_DIR}/logstash-core/lib/jars
 
     echo "-----> Applying logstash.yml"
     cp ${LOGSTASH_CONFIG_FULL_PATH}/logstash.yml ${LOGSTASH_DIR}/config/logstash.yml
