@@ -10,7 +10,7 @@ ENV_DIR=$3
 
 INIT_SCRIPT="$BUILD_DIR/.profile.d/logstash.sh"
 
-echo "==== Starting Logstash Buildpack ===="
+echo "-----> Starting Logstash Buildpack"
 
 if [ -f "$ENV_DIR/DOWNLOAD_URL" ]; then
   DOWNLOAD_URL=$(cat $ENV_DIR/DOWNLOAD_URL)
@@ -61,9 +61,6 @@ echo "Creating $LOGSTASH_DIR"
 mkdir $LOGSTASH_DIR
 tar xz --strip-components=1 -C $LOGSTASH_DIR --wildcards -f $CACHE_DIR/$LOGSTASH_PACKAGE
 
-echo "build dir:"
-ls ${BUILD_DIR}
-
 
 if [ -f "$ENV_DIR/LOGSTASH_CONFIG_PATH" ]; then
   LOGSTASH_CONFIG_PATH=$(cat $ENV_DIR/LOGSTASH_CONFIG_PATH)
@@ -91,18 +88,22 @@ fi
 
 LOGSTASH_PIPELINE_FULL_PATH="${BUILD_DIR}/${LOGSTASH_PIPELINE_PATH}"
 
+echo "-----> Preparing pipeline"
+
 if [ -d "${LOGSTASH_PIPELINE_FULL_PATH}" ]; then
     echo "Found Logstash pipeline directory. Location: ${LOGSTASH_PIPELINE_FULL_PATH}"
 
     echo "Copying pipeline from ${LOGSTASH_PIPELINE_FULL_PATH} to ${LOGSTASH_DIR}/pipeline"
     cp -r ${LOGSTASH_PIPELINE_FULL_PATH} ${LOGSTASH_DIR}/pipeline
 
+    echo "-----> Found pipelines"
     ls ${LOGSTASH_DIR}/pipeline
 else
     echo "No Logstash pipeline found. Searched in ${LOGSTASH_PIPELINE_FULL_PATH}"
     exit 1
 fi
 
+echo "-----> Preparing initial script"
 
 echo "Exporting PATH" | indent
 echo 'export PATH="$PATH:'${LOGSTASH_DIR##*/}'/bin"' > $INIT_SCRIPT
@@ -115,3 +116,5 @@ do
   ENV_VAR_VALUE=$(cat $ENV_FILE)
   echo 'export '${ENV_VAR_NAME}'="'${ENV_VAR_VALUE}'"'$'\n' >> $INIT_SCRIPT
 done
+
+echo "-----> Logstash build succeeded!"
