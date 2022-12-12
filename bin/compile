@@ -108,13 +108,13 @@ echo "-----> Preparing initial script"
 echo "Exporting PATH" | indent
 echo 'export PATH="$PATH:'${LOGSTASH_DIR##*/}'/bin"' > $INIT_SCRIPT
 
-echo "Exporting Heroku env vars" | indent
-FILES="$ENV_DIR/*"
-for ENV_FILE in $FILES
-do
-  ENV_VAR_NAME=${ENV_FILE##*/}
-  ENV_VAR_VALUE=$(cat $ENV_FILE)
-  echo 'export '${ENV_VAR_NAME}'="'${ENV_VAR_VALUE}'"'$'\n' >> $INIT_SCRIPT
-done
+# echo "Exporting Heroku env vars" | indent
+# FILES="$ENV_DIR/*"
+# for ENV_FILE in $FILES
+# do
+#   ENV_VAR_NAME=${ENV_FILE##*/}
+#   ENV_VAR_VALUE=$(cat $ENV_FILE)
+#   echo 'export '${ENV_VAR_NAME}'="'${ENV_VAR_VALUE}'"'$'\n' >> $INIT_SCRIPT
+# done
 
 echo "-----> Logstash build succeeded!"
