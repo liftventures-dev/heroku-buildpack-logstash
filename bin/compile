@@ -76,7 +76,7 @@ if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
 
     echo "-----> Applyinh JARs"
     mkdir -p ${LOGSTASH_DIR}/logstash-core/lib/jars
-    cp -r ${LOGSTASH_CONFIG_FULL_PATH}/jars ${LOGSTASH_DIR}/logstash-core/lib/jars
+    cp -r ${LOGSTASH_CONFIG_FULL_PATH}/jars/ ${LOGSTASH_DIR}/logstash-core/lib/jars
     ls ${LOGSTASH_DIR}/logstash-core/lib/jars
 
     echo "-----> Applying logstash.yml"
