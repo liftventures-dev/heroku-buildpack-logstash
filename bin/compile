@@ -75,7 +75,9 @@ if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
     echo $LOGSTASH_CONFIG_FILES
 
     echo "-----> Applyinh JARs"
+    mkdir -p ${LOGSTASH_DIR}/logstash-core/lib/jars
     cp -r ${LOGSTASH_CONFIG_FULL_PATH}/jars ${LOGSTASH_DIR}/logstash-core/lib/jars
+    ls ${LOGSTASH_DIR}/logstash-core/lib/jars
 
     echo "-----> Applying logstash.yml"
     cp ${LOGSTASH_CONFIG_FULL_PATH}/logstash.yml ${LOGSTASH_DIR}/config/logstash.yml
@@ -111,5 +113,6 @@ echo "-----> Preparing initial script"
 
 echo "Exporting PATH" | indent
 echo 'export PATH="$PATH:'${LOGSTASH_DIR##*/}'/bin"' > $INIT_SCRIPT
+echo $(cat $INIT_SCRIPT)
 
 echo "-----> Logstash build succeeded!"
