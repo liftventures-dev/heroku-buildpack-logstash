@@ -23,7 +23,7 @@ LOGSTASH_DIR="$BUILD_DIR/${LOGSTASH_PACKAGE%%.tar.gz}"
 
 case ${LOGSTASH_PACKAGE} in
   *.tar.gz)
-    echo "Building to $LOGSTASH_DIR..."
+    echo "Building to $LOGSTASH_DIR..." | indent
     ;;
   *)
     echo "Only tar.gz is supported: $LOGSTASH_PACKAGE" | indent
@@ -57,7 +57,7 @@ if [ ! -f "$CACHE_DIR/$LOGSTASH_PACKAGE" ]; then
   fi
 fi
 
-echo "Creating $LOGSTASH_DIR"
+echo "Creating $LOGSTASH_DIR" | indent
 mkdir $LOGSTASH_DIR
 tar xz --strip-components=1 -C $LOGSTASH_DIR --wildcards -f $CACHE_DIR/$LOGSTASH_PACKAGE
 
@@ -71,18 +71,18 @@ fi
 LOGSTASH_CONFIG_FULL_PATH="${BUILD_DIR}/${LOGSTASH_CONFIG_PATH}"
 
 if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
-    echo "Found Logstash configuration directory. Location: ${LOGSTASH_CONFIG_FULL_PATH}"
+    echo "Found Logstash configuration directory. Location: ${LOGSTASH_CONFIG_FULL_PATH}" | indent
 
     echo "-----> Copying Logstash configuration files"
     LOGSTASH_CONFIG_FILES=$(find ${LOGSTASH_CONFIG_FULL_PATH} -maxdepth 1 -type f)
-    echo $LOGSTASH_CONFIG_FILES
+    echo $LOGSTASH_CONFIG_FILES | indent
 
     cp ${LOGSTASH_CONFIG_FILES} ${LOGSTASH_DIR}
 
     echo "-----> Applying logstash.yml"
     cp ${LOGSTASH_CONFIG_FULL_PATH}/logstash.yml ${LOGSTASH_DIR}/config/logstash.yml
 else
-    echo "No Logstash configuration found, using defaults."
+    echo "No Logstash configuration found, using defaults." | indent
 fi
 
 
@@ -97,15 +97,15 @@ LOGSTASH_PIPELINE_FULL_PATH="${BUILD_DIR}/${LOGSTASH_PIPELINE_PATH}"
 echo "-----> Preparing pipeline"
 
 if [ -d "${LOGSTASH_PIPELINE_FULL_PATH}" ]; then
-    echo "Found Logstash pipeline directory. Location: ${LOGSTASH_PIPELINE_FULL_PATH}"
+    echo "Found Logstash pipeline directory. Location: ${LOGSTASH_PIPELINE_FULL_PATH}" | indent
 
-    echo "Copying pipeline from ${LOGSTASH_PIPELINE_FULL_PATH} to ${LOGSTASH_DIR}/pipeline"
+    echo "Copying pipeline from ${LOGSTASH_PIPELINE_FULL_PATH} to ${LOGSTASH_DIR}/pipeline" | indent
     cp -r ${LOGSTASH_PIPELINE_FULL_PATH} ${LOGSTASH_DIR}/pipeline
 
     echo "-----> Found pipelines"
     ls ${LOGSTASH_DIR}/pipeline
 else
-    echo "No Logstash pipeline found. Searched in ${LOGSTASH_PIPELINE_FULL_PATH}"
+    echo "No Logstash pipeline found. Searched in ${LOGSTASH_PIPELINE_FULL_PATH}" | indent
     exit 1
 fi
 
