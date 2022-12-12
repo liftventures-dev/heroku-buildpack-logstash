@@ -78,13 +78,29 @@ if [ -d "${LOGSTASH_CONFIG_FULL_PATH}" ]; then
 
     echo "Applying logstash.yml"
     cp ${LOGSTASH_CONFIG_FULL_PATH}/logstash.yml ${LOGSTASH_DIR}/config/logstash.yml
+else
+    echo "No Logstash configuration found, using defaults."
+fi
 
-    echo "Copying pipeline from ${LOGSTASH_CONFIG_FULL_PATH}/pipeline to ${LOGSTASH_DIR}/pipeline"
-    cp -r ${LOGSTASH_CONFIG_FULL_PATH}/pipeline ${LOGSTASH_DIR}/pipeline
+
+if [ -f "$ENV_DIR/LOGSTASH_PIPELINE_PATH" ]; then
+  LOGSTASH_PIPELINE_PATH=$(cat $ENV_DIR/LOGSTASH_PIPELINE_PATH)
+else
+  LOGSTASH_PIPELINE_PATH="${LOGSTASH_CONFIG_FULL_PATH}/pipeline"
+fi
+
+LOGSTASH_PIPELINE_FULL_PATH="${BUILD_DIR}/${LOGSTASH_PIPELINE_PATH}"
+
+if [ -d "${LOGSTASH_PIPELINE_FULL_PATH}" ]; then
+    echo "Found Logstash pipeline directory. Location: ${LOGSTASH_PIPELINE_FULL_PATH}"
+
+    echo "Copying pipeline from ${LOGSTASH_PIPELINE_FULL_PATH} to ${LOGSTASH_DIR}/pipeline"
+    cp -r ${LOGSTASH_PIPELINE_FULL_PATH} ${LOGSTASH_DIR}/pipeline
 
     ls ${LOGSTASH_DIR}/pipeline
 else
-    echo "No Logstash configuration found, using defaults."
+    echo "No Logstash pipeline found. Searched in ${LOGSTASH_PIPELINE_FULL_PATH}"
+    exit 1
 fi
 
 
